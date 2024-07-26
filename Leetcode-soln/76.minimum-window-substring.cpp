@@ -24,32 +24,39 @@ Logic:
 
  */
     string minWindow(string s, string t) {
-        vector<int>m(128,0);
-        int start =0;
+        vector<int>map(128,0);
+        for(auto c:t){
+            map[c]++;
+        }
+        int start=0;
         int end =0;
-        int counter = t.size();
         int d = INT_MAX;
         int head =0;
-
-        for(auto c: t){
-            m[c]++;
-        }
-
+        int counter = t.size();
         while(end<s.size()){
-            if(m[s[end++]] -- >0){
-                counter --;
+            if(map[s[end]]>0){
+                counter--;
             }
-            while(counter == 0){
-                if(end - start <d ) {
-                    d= end -start;
-                    head = start;
+            map[s[end]]--;
+            end++;
+            while(counter==0){
+                if(d>end-start){
+                    head=start;
+                    d = end-start;
                 }
-                if(m[s[start++]]++ == 0){
+                if(map[s[start]]==0){
                     counter++;
                 }
+                map[s[start]]++;
+                start++;
             }
         }
-        return d == INT_MAX? "" : s.substr(head, d);
+        if (d==INT_MAX){
+            return "";
+        }
+        else{
+            return s.substr(head,d);
+        }
 
     }
 };
